@@ -840,10 +840,10 @@
                 <h2>Production Competencies Matrix</h2>
             </div>
             <div class="tech-filter-grid">
-                <button class="filter-pill active" onclick="filterTech('all')">Complete Spectrum</button>
-                <button class="filter-pill" onclick="filterTech('lang')">Languages</button>
-                <button class="filter-pill" onclick="filterTech('front')">UI Core / Cross-Platform</button>
-                <button class="filter-pill" onclick="filterTech('back')">Backend Engine / Storage Systems</button>
+                <button class="filter-pill active" onclick="filterTech('all', this)">Complete Spectrum</button>
+                <button class="filter-pill" onclick="filterTech('lang', this)">Languages</button>
+                <button class="filter-pill" onclick="filterTech('front', this)">UI Core / Cross-Platform</button>
+                <button class="filter-pill" onclick="filterTech('back', this)">Backend Engine / Storage Systems</button>
             </div>
             <div class="skills-matrix" id="skillsMatrix">
                 <div class="skill-node" data-cat="lang"><i class="fab fa-js"></i><p>JavaScript</p></div>
@@ -1120,16 +1120,31 @@
             menuBtn.querySelector('i').classList.toggle('fa-times');
         });
 
-        // Matrix Competency Filtration Core Logic Block
-        function filterTech(category) {
+        // Fixed Matrix Competency Filtration Core Logic Block
+        function filterTech(category, element) {
+            // Update Active Filter Pill States cleanly using target element reference
             const pills = document.querySelectorAll('.filter-pill');
             pills.forEach(pill => pill.classList.remove('active'));
-            event.target.classList.add('active');
+            
+            if(element) {
+                element.classList.add('active');
+            }
 
-            const nodes = document.querySelectorAll('.showcase-card');
+            // Handle Project Showcase filter elements separately
+            const cards = document.querySelectorAll('.showcase-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-cat') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Handle Matrix Skill Node filter elements if present
+            const nodes = document.querySelectorAll('.skill-node');
             nodes.forEach(node => {
                 if (category === 'all' || node.getAttribute('data-cat') === category) {
-                    node.style.display = 'flex';
+                    node.style.display = 'block';
                 } else {
                     node.style.display = 'none';
                 }
